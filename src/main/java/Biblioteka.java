@@ -36,6 +36,17 @@ class Biblioteka {
         }
         return wynik;
     }
+    public void wypozyczKsiazke(Ksiazka ksiazka, Pozyczajacy pozyczajacy, String dataWypozyczenia, String dataZwrotu) {
+        if (ksiazka.getLiczbaDostepnychEgzemplarzy() > 0) {
+            ksiazka.setLiczbaDostepnychEgzemplarzy(ksiazka.getLiczbaDostepnychEgzemplarzy() - 1);
+            Wypozyczenie wypozyczenie = new Wypozyczenie(ksiazka, pozyczajacy, dataWypozyczenia, dataZwrotu);
+            pozyczajacy.dodajWypozyczenie(wypozyczenie);
+            System.out.println("Książka \"" + ksiazka.getTytul() + "\" została wypożyczona przez " + pozyczajacy.getImie() + " " + pozyczajacy.getNazwisko());
+            System.out.println("Pozostało egzemplarzy :"+ksiazka.getLiczbaDostepnychEgzemplarzy());
+        } else {
+            System.out.println("Przepraszamy, nie ma dostępnych egzemplarzy tej książki.");
+        }
+    }
 
     public void wyswietlWszystkieKsiazki() {
         for (Ksiazka ksiazka : listaKsiazek) {

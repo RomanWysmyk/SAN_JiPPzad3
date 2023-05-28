@@ -18,7 +18,20 @@ public class Serwis {
     private static Scanner scanner = new Scanner(System.in);
     private static Biblioteka biblioteka = new Biblioteka();
 
+
+
+
     public static void main(String[] args) {
+
+        Ksiazka ksiazka1 = new Ksiazka("123", "123", 123, "123", "123", "123", 123);
+        biblioteka.dodajKsiazke(ksiazka1);
+
+        Ksiazka ksiazka2 = new Ksiazka("111", "111", 111, "111", "111", "111", 111);
+        biblioteka.dodajKsiazke(ksiazka2);
+
+        Ksiazka ksiazka3 = new Ksiazka("Kwantechizm", "Andrzej Dragan", 2022, "BrakDanych", "666", "Naukowa", 7);
+        biblioteka.dodajKsiazke(ksiazka3);
+
         boolean czyWyjsc = false;
         while (!czyWyjsc) {
             wyswietlMenu();
@@ -42,6 +55,9 @@ public class Serwis {
                     wyswietlWszystkieKsiazki();
                     break;
                 case 6:
+                    zglosWyporzeczenieKsiazki();
+                    break;
+                case 7:
                     czyWyjsc = true;
                     break;
                 default:
@@ -57,7 +73,8 @@ public class Serwis {
         System.out.println("3. Aktualizuj książkę");
         System.out.println("4. Wyszukaj książki");
         System.out.println("5. Wyświetl wszystkie książki");
-        System.out.println(ANSI_PURPLE+"6. Wyjdź"+ANSI_RESET);
+        System.out.println("6. Zgłoś wyporzyczenie książki");
+        System.out.println(ANSI_PURPLE+"7. Wyjdź"+ANSI_RESET);
         System.out.print(ANSI_CYAN+"Wybierz opcję: "+ANSI_RESET);
     }
 
@@ -199,7 +216,7 @@ public class Serwis {
         if (wszystkieKsiazki.isEmpty()) {
             System.out.println("Brak książek w bibliotece.");
         } else {
-            System.out.println("Wszystkie książki w bibliotece:");
+            System.out.println(ANSI_RED+"Wszystkie książki w bibliotece:"+ANSI_RESET);
             for (Ksiazka ksiazka : wszystkieKsiazki) {
                 System.out.println("Tytuł: " + ksiazka.getTytul());
                 System.out.println("Autor: " + ksiazka.getAutor());
@@ -208,8 +225,40 @@ public class Serwis {
                 System.out.println("Numer ISBN: " + ksiazka.getNumerISBN());
                 System.out.println("Gatunek: " + ksiazka.getGatunek());
                 System.out.println("Liczba dostępnych egzemplarzy: " + ksiazka.getLiczbaDostepnychEgzemplarzy());
-                System.out.println("-----------------------");
+                System.out.println(ANSI_RED+"-----------------------"+ANSI_RESET);
             }
         }
     }
+
+    private static void zglosWyporzeczenieKsiazki(){
+        System.out.print("Podaj tytuł książki do wyporzyczenia: ");
+        String tytul = scanner.nextLine();
+        System.out.print("Podaj autora książki do wyporzyczenia: ");
+        String autor = scanner.nextLine();
+
+        List<Ksiazka> znalezioneKsiazki = biblioteka.wyszukajKsiazki("tytul", tytul);
+        znalezioneKsiazki.retainAll(biblioteka.wyszukajKsiazki("autor", autor));
+
+        if (znalezioneKsiazki.isEmpty()) {
+            System.out.println("Nie znaleziono książki o podanym tytule i autorze.");
+        } else {
+            System.out.print("Podaj imie osoby wyporzyczającej: ");
+            String imie = scanner.nextLine();
+            System.out.print("Podaj nazwisko osoby wyporzyczającej: ");
+            String naziwsko = scanner.nextLine();
+            System.out.print("Podaj date wypozyczenia(jesli dotyczy): ");
+            String dataWyp = scanner.nextLine();
+            System.out.print("Podaj date zwrotu(jesli dotyczy): ");
+            String dataZwortu = scanner.nextLine();
+
+            Pozyczajacy pozyczajacy = new Pozyczajacy(imie,naziwsko,dataWyp,dataZwortu);
+
+            for (Ksiazka ksiazka : znalezioneKsiazki) {
+               biblioteka.wypozyczKsiazke(ksiazka,pozyczajacy,pozyczajacy.getDataWypozyczenia(),pozyczajacy.getDataZwrotu());
+
+            }
+
+        }
+    }
+
 }

@@ -1,14 +1,20 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Pozyczajacy {
     private String imie;
     private String nazwisko;
     private String dataWypozyczenia;
     private String dataZwrotu;
+    private List<Wypozyczenie> wypozyczenia;
+
 
     public Pozyczajacy(String imie, String nazwisko, String dataWypozyczenia, String dataZwrotu) {
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.dataWypozyczenia = dataWypozyczenia;
         this.dataZwrotu = dataZwrotu;
+        this.wypozyczenia = new ArrayList<>();
     }
 
     // Gettery i Settery
@@ -43,5 +49,8 @@ class Pozyczajacy {
 
     public void setDataZwrotu(String dataZwrotu) {
         this.dataZwrotu = dataZwrotu;
+    }
+    public void dodajWypozyczenie(Wypozyczenie wypozyczenie) {
+        wypozyczenia.add(wypozyczenie);
     }
 }
